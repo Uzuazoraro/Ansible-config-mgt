@@ -77,6 +77,7 @@ Update your playbooks/common.yml file with following code:
 
 ![ansible playbook common.yml](./run playbook.png)
 
+<<<<<<< HEAD
 ubuntu@ip-172-31-81-174:~/ansible-config-mgt$ ansible-playbook -i inventory/dev.yml playbooks/common.yml
 
 PLAY [update web, nfs and db servers] ***************************************************************************************************************
@@ -99,3 +100,5 @@ PLAY RECAP *********************************************************************
 172.31.89.251              : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 172.31.93.79               : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 
+=======
+>>>>>>> 3e5b0079a72761f9fe4bb225d6c55daba96dd4c0
