@@ -2,6 +2,4 @@
 
 ansible webhook trigger
 
-Still testing trigger
-
-ansible webhook trigger
+copy artifact trigger
