@@ -21,6 +21,7 @@
 7. Test your set up by making some change in README.MD file inside your ansible-config-mgt repository 
 
 ansible webhook trigger
+<<<<<<< HEAD
 
 copy artifact trigger
 
@@ -106,3 +107,5 @@ or
 `http://3.87.5.119/index.php`
 
 
+=======
+>>>>>>> b9de4ca3f4f8812c3f4aa14986f63bc9f22c15bd
