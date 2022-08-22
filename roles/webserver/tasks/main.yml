@@ -14,7 +14,7 @@
 - name: clone a repo
   become: true
   ansible.builtin.git:
-    repo: https://github.com/<your-name>/tooling.git  
+    repo: https://github.com/uzuazoraro/tooling.git
     dest: /var/www/html
     force: yes
 
@@ -30,8 +30,6 @@
 
 - name: recursively remove /var/www/html/html/ directory
   become: true
-  anible.builtin.file:  
-    path: /var/www/html/html   
+  ansible.builtin.file:
+    path: /var/www/html/html
     state: absent
-
-
