@@ -102,3 +102,26 @@ PLAY RECAP *********************************************************************
 
 =======
 >>>>>>> 3e5b0079a72761f9fe4bb225d6c55daba96dd4c0
+
+
+# ansible-config-mgt
+
+## ANSIBLE REFACTORING AND STATIC ASSIGNMENTS: PROJECT 12 
+
+### Step 1 – Jenkins job enhancement
+
+1. Go to your Jenkins-Ansible server and create a new directory called ansible-config-artifact. we will store there all artifacts after each build.
+`sudo mkdir /home/ubuntu/ansible-config-artifact`
+
+2. Change permissions to this directory, so Jenkins could save files there.
+`chmod -R 0777 /home/ubuntu/ansible-config-artifact`
+
+3. Go to Jenkins web console -> Manage Jenkins -> Manage Plugins -> on Available tab search for Copy Artifact and install this plugin without restarting Jenkins
+
+4. Create a new Freestyle project and name it save_artifacts.
+
+5. Configure and complete your existing ansible project. This configuration will trigger this project.
+
+6. The main idea of save_artifacts project is to save artifacts into /home/ubuntu/ansible-config-artifact directory.
+
+7. Test your set up by making some change in README.MD file inside your ansible-config-mgt repository 
