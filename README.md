@@ -167,3 +167,12 @@ You can browse available community roles here and we'll be using a MySQL role de
 mv geerlingguy.mysql/ mysql
 
 Read README.md file, and edit roles configuration to use correct credentials for MySQL required for the tooling website.
+
+Now it is time to upload the changes into your GitHub:
+
+git add .
+git commit -m "Commit new role files into GitHub"
+git push --set-upstream origin dynamic-assignments
+
+Now, if you are satisfied with your codes, you can create a Pull Request and merge it to main branch on GitHub.
+
