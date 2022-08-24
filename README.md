@@ -176,3 +176,19 @@ git push --set-upstream origin dynamic-assignments
 
 Now, if you are satisfied with your codes, you can create a Pull Request and merge it to main branch on GitHub.
 
+## Step 4 - Load Balancer roles
+
+We want to be able to choose which Load Balancer to use, Nginx or Apache, so we need to have two roles respectively:
+
+1. Nginx
+2. Apache
+
+`cd roles`
+
+`ansible-galaxy install geerlingguy.nginx`
+
+`ansible-galaxy install geerlingguy.apache`
+
+`mv geerlingguy.nginx/ nginx`
+
+`mv geerlingguy.apache/ apache`
