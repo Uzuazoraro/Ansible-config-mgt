@@ -192,3 +192,12 @@ We want to be able to choose which Load Balancer to use, Nginx or Apache, so we 
 `mv geerlingguy.nginx/ nginx`
 
 `mv geerlingguy.apache/ apache`
+
+Declare a variable in defaults/main.yml file inside the Nginx and Apache roles. Name each variables enable_nginx_lb and enable_apache_lb respectively.
+
+Set both values to false like this enable_nginx_lb: false and enable_apache_lb: false.
+
+Declare another variable in both roles load_balancer_is_required and set its value to false as well
+
+Update both assignment and site.yml files respectively
+
