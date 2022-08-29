@@ -37,7 +37,7 @@
     block: |
       {{ item.ip }} {{ item.name }}
   loop:
-    - { name: web1, ip: 172.31.88.17 }    
+    - { name: web1, ip: 172.31.88.17 }   
     - { name: web2, ip: 172.31.89.251 }
     - "proxy_pass http://myappl"
     
