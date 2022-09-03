@@ -250,6 +250,66 @@ Click on Administration to exit the Blue Ocean console.
 
 Inside the Ansible project, create a new directory deploy and start a new file Jenkinsfile inside the directory.
 
+Add the code snippet below to start building the Jenkinsfile gradually. This pipeline currently has just one stage called Build and the only thing we are doing is using the shell script module to echo Building Stage
 
+pipeline {
+    agent any
 
+  stages {
+    stage('Build') {
+      steps {
+        script {
+          sh 'echo "Building Stage"'
+        }
+      }
+    }
+    }
+}
 
+Now go back into the Ansible pipeline in Jenkins, and select configure
+
+Scroll down to Build Configuration section and specify the location of the Jenkinsfile at deploy/Jenkinsfile
+
+First of all, click on the project repository. Then click configure. Click Build Configuration.
+Configure. Note that your Jenkins file is in a repository. Configure it as "deploy/Jenkinsfile"
+
+Click on main in your Jenkins repo. Then click "build now."
+
+This will trigger a build and you will be able to see the effect of our basic Jenkinsfile configuration by going through the console output of the build.
+
+To really appreciate and feel the difference of Cloud Blue UI, it is recommended to try triggering the build again from Blue Ocean interface.
+
+Click on Blue Ocean
+
+## 1. Create a new git branch and name it feature/jenkinspipeline-stages with the command below:
+`git checkout -b feature/jenkinspipeline-stages`
+
+2. pipeline {
+    agent any
+
+  stages {
+    stage('Build') {
+      steps {
+        script {
+          sh 'echo "Building Stage"'
+        }
+      }
+    }
+
+    stage('Test') {
+      steps {
+        script {
+          sh 'echo "Testing Stage"'
+        }
+      }
+    }
+    }
+}
+
+3. To make your new branch show up in Jenkins, we need to tell Jenkins to scan the repository.
+
+Click on the "Administration" button
+
+4. Navigate to the Ansible project and click on "Scan repository now"
+
+5. Refresh the page and both branches will start building automatically. You can go into Blue Ocean and see both branches there too.
