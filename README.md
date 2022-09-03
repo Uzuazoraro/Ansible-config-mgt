@@ -201,3 +201,55 @@ Declare another variable in both roles load_balancer_is_required and set its val
 
 Update both assignment and site.yml files respectively
 
+
+# Project 14 Experience Continuous Integration With Jenkins | Ansible | Artifactory | Sonarqube | PHP
+
+## STEP 1 - ANSIBLE ROLES FOR CI ENVIRONMENT
+Now go ahead and Add two more roles to ansible:
+
+1. SonarQube (Scroll down to the Sonarqube section to see instructions on how to set up and configure SonarQube manually)
+2. Artifactory
+
+## Configuring Ansible For Jenkins Deployment
+In previous projects, you have been launching Ansible commands manually from a CLI. Now, with Jenkins, we will start running Ansible from Jenkins UI.
+
+To do this,
+
+1. Install or Navigate to Jenkins URL
+
+`curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo tee \
+  /usr/share/keyrings/jenkins-keyring.asc > /dev/null`
+`echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null`
+`sudo apt-get update`
+`sudo apt-get install jenkins`
+
+2. Install & Open Blue Ocean Jenkins Plugin by clicking on the blue ocean after installation.
+
+3. Create a new pipeline
+
+4. Select GitHub
+
+5. Connect Jenkins with GitHub
+
+6. Login to GitHub & Generate an Access Tokenhttps://www.darey.io/wp-content/uploads/2021/07/Jenkins-Create-Access-Token-To-Github.png
+Click on create-access-token under Connect to GitHub.
+
+7. Copy Access Token
+
+8. Paste the created token in Jenkins and click on connect.
+
+9. Click or select the name of the organization (Uzuazoraro)
+Click on the repository you're working on.
+Click on "Create pipeline."
+
+Click on Administration to exit the Blue Ocean console.
+
+## Let us create our Jenkinsfile
+
+Inside the Ansible project, create a new directory deploy and start a new file Jenkinsfile inside the directory.
+
+
+
+
