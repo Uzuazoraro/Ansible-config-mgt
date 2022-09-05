@@ -313,3 +313,87 @@ Click on the "Administration" button
 4. Navigate to the Ansible project and click on "Scan repository now"
 
 5. Refresh the page and both branches will start building automatically. You can go into Blue Ocean and see both branches there too.
+
+## RUNNING ANSIBLE PLAYBOOK FROM JENKINS
+
+1. Installing Ansible on Jenkins
+2. Installing Ansible plugin in Jenkins UI
+3. Creating Jenkinsfile from scratch. (Delete all you currently have in there and start all over to get Ansible to run successfully)
+
+### Jenkinsfile for quick task
+======================================
+---
+ pipeline {
+    agent any
+
+  stages {
+    stage('Build') {
+      steps {
+        script {
+          sh 'echo "Building Stage"'
+        }
+      }
+    }
+
+    stage('Test') {
+      steps {
+        script {
+          sh 'echo "Testing Stage"'
+        }
+      }
+    }
+
+    stage('Package') {
+      steps {
+        script {
+          sh 'echo "Package Stage"'
+        }
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        script {
+          sh 'echo "Deploy Stage"'
+        }
+      }
+    }
+
+    stage("Clean up") {
+      steps {
+        cleanWs()
+      }
+    } 
+
+    }
+}
+---
+
+Note: Ensure that Ansible runs against the Dev environment successfully.
+
+Possible errors to watch out for:
+---------------------------------
+
+Ensure that the git module in Jenkinsfile is checking out SCM to main branch instead of master (GitHub has discontinued the use of Master due to Black Lives Matter. You can read more here)
+
+Jenkins needs to export the ANSIBLE_CONFIG environment variable. You can put the .ansible.cfg file alongside Jenkinsfile in the deploy directory. This way, anyone can easily identify that everything in there relates to deployment. Then, using the Pipeline Syntax tool in Ansible, generate the syntax to create environment variables to set.
+
+## Parameterizing Jenkinsfile For Ansible Deployment
+To deploy to other environments, we will need to use parameters.
+
+Update sit inventory with new servers
+[tooling]
+<SIT-Tooling-Web-Server-Private-IP-Address>
+
+[todo]
+<SIT-Todo-Web-Server-Private-IP-Address>
+
+[nginx]
+<SIT-Nginx-Private-IP-Address>
+
+[db:vars]
+ansible_user=ec2-user
+ansible_python_interpreter=/usr/bin/python
+
+[db]
+<SIT-DB-Server-Private-IP-Address>

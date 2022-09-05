@@ -1,0 +1,15 @@
+[tooling]
+172.31.81.162
+
+[todo]
+172.31.90.63
+
+[nginx]
+172.31.93.79 ansible_ssh_user='ubuntu'
+
+[db:vars]
+ansible_user=ec2-user
+ansible_python_interpreter=/usr/bin/python
+
+[db]
+172.31.86.92 ansible_ssh_user='ec2-user'
