@@ -205,6 +205,29 @@ Update both assignment and site.yml files respectively
 # Project 14 Experience Continuous Integration With Jenkins | Ansible | Artifactory | Sonarqube | PHP
 
 ## STEP 1 - ANSIBLE ROLES FOR CI ENVIRONMENT
+
+## Install Java and JAVA path:
+
+ubuntu@ip-172-31-84-49:~$ vi .bash_profile
+ubuntu@ip-172-31-84-49:~$ source ~/.bash_profile
+ubuntu@ip-172-31-84-49:~$ cat .bash_profile
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+        . ~/.bashrc
+fi
+
+# User specific environment and startup programs
+
+PATH=$PATH:$HOME/bin
+
+export PATH
+
+export JAVA_HOME=$(dirname $(dirname $(readlink $(readlink $(which javac)))))
+export PATH=$PATH:$JAVA_HOME/bin
+export CLASSPATH=.:$JAVE_HOME/jre/lib:$JAVA_HOME/lib:$JAVA_HOME/lib/tools/jar
+
 Now go ahead and Add two more roles to ansible:
 
 1. SonarQube (Scroll down to the Sonarqube section to see instructions on how to set up and configure SonarQube manually)
