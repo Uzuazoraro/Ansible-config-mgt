@@ -17,5 +17,24 @@ pipeline {
         }
       }
     }
+    stage('Package') {
+      staeps {
+        script {
+          sh 'echo "Package Stage"'
+        }
+      }
+    }
+    stage('Deploy') {
+      steps {
+        script {
+          sh 'echo "Deploying"'
+        }
+      }
+    }
+    stage("Clean up") {
+      steps {
+        CleanWs()
+      }
+    }
   }
 }
