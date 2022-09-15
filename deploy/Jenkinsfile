@@ -17,25 +17,5 @@ pipeline {
         }
       }
     }
-
-    stage('Package') {
-  steps {
-    script {
-      sh 'echo "Package Stage"'
-    }
   }
-}
-
-stage('Deploy') {
-  steps {
-    script {
-      sh 'echo "Deploy Stage"'
-    }
-  }
-}
-
-stage("Clean up") {
-  steps {
-    cleanWs()
-    }
 }
