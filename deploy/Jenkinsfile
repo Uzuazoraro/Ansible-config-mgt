@@ -15,7 +15,7 @@ Pipeline {
       }
     }
 
-    stage ('checkout SCM') {
+    stage ('Checkout SCM') {
       steps {
         git branch: 'feature/jenkinspipeline-stages', url: 'https://github.com/Uzuazoraro/ansible-config-mgt.git'
       }
@@ -28,7 +28,7 @@ Pipeline {
       }
     }
 
-    stage('Run Ansible Playbook ') {
+    stage('Run Ansible Playbook') {
       steps {
         ansiblePlaybook become: true, colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible', inventory: 'inventory/dev.yml', playbook: 'playbooks/site.yml'
       }
