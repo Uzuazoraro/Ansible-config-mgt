@@ -5,6 +5,10 @@ Pipeline {
       ANSIBLE_CONFIG="${WORKSPACE}/deploy/ansible.cfg"
     }
 
+  parameters {
+      string(name: 'inventory', defaultValue: 'dev',  description: 'This is the inventory file for the environment to deploy configuration')
+    }
+
   stages {
  
     stage ("initial cleanup") {
@@ -15,7 +19,7 @@ Pipeline {
       }
     }
 
-    stage ('Checkout SCM') {
+    stage ('checkout SCM') {
       steps {
         git branch: 'feature/jenkinspipeline-stages', url: 'https://github.com/Uzuazoraro/ansible-config-mgt.git'
       }
@@ -30,7 +34,7 @@ Pipeline {
 
     stage('Run Ansible Playbook') {
       steps {
-        ansiblePlaybook become: true, colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible', inventory: '${inventory}', playbook: 'playbooks/site.yml'
+        ansiblePlaybook become: true, colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible', inventory: 'inventory/dev.yml', playbook: 'playbooks/site.yml'
       }
     }
 
@@ -40,5 +44,4 @@ Pipeline {
       }
     }
   }
- 
- }
+}
