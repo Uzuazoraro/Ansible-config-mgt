@@ -395,7 +395,7 @@ Click on the "Administration" button
 Note: Ensure that Ansible runs against the Dev environment successfully.
 
 Possible errors to watch out for:
----------------------------------
+=================================
 
 Ensure that the git module in Jenkinsfile is checking out SCM to main branch instead of master (GitHub has discontinued the use of Master due to Black Lives Matter. You can read more here)
 
