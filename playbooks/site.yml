@@ -11,7 +11,7 @@
 
 - hosts: db
 - name: database assignment
-  import_playbook: ../static-assignments/database.yml
+    import_playbook: ../static-assignments/database.yml
 
 
 # -name: import webservers file
@@ -19,6 +19,6 @@
 
 - hosts: nginx
 - name: nginx assignment
-  import_playbook: ../static-assignments/nginx.yml
+    import_playbook: ../static-assignments/nginx.yml
    
 
