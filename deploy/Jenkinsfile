@@ -1,4 +1,4 @@
-Pipeline {
+pipeline {
   agent any
 
   environment {
@@ -13,13 +13,13 @@ Pipeline {
  
     stage ("initial cleanup") {
       steps {
-        dir ("${WORKSPACE}") {
+        dir("${WORKSPACE}") {
           deleteDir()
         }
       }
     }
 
-    stage ('checkout SCM') {
+    stage ('Checkout SCM') {
       steps {
         git branch: 'feature/jenkinspipeline-stages', url: 'https://github.com/Uzuazoraro/ansible-config-mgt.git'
       }
@@ -34,13 +34,13 @@ Pipeline {
 
     stage('Run Ansible Playbook') {
       steps {
-        ansiblePlaybook become: true, colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible', inventory: 'inventory/dev.yml', playbook: 'playbooks/site.yml'
+        ansiblePlaybook become: true, colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible', inventory: '${inventory}', playbook: 'playbooks/site.yml'
       }
     }
 
     stage('Clean Workspace after build') {
       steps {
-        cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuild: true, cleanWhenUnstable: true, deleteDirs: true)
+        cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenUnstable: true, deleteDirs: true)
       }
     }
   }
