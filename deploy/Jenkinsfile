@@ -13,13 +13,13 @@ pipeline {
  
     stage ("initial cleanup") {
       steps {
-        dir ("${WORKSPACE}") {
+        dir("${WORKSPACE}") {
           deleteDir()
         }
       }
     }
 
-    stage ('checkout SCM') {
+    stage ('Checkout SCM') {
       steps {
         git branch: 'feature/jenkinspipeline-stages', url: 'https://github.com/Uzuazoraro/ansible-config-mgt.git'
       }
