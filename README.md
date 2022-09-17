@@ -420,3 +420,116 @@ ansible_python_interpreter=/usr/bin/python
 
 [db]
 <SIT-DB-Server-Private-IP-Address>
+
+
+## CI/CD PIPELINE FOR TODO APPLICATION
+
+Our goal here is to deploy the application onto servers directly from Artifactory rather than from git. 
+
+## Phase 1 – Prepare Jenkins
+
+Fork the repository below into your GitHub account
+https://github.com/darey-devops/php-todo.git
+
+Then, copy the code form your github and clone it in your terminal. 
+Note that you cannot clone one repository unto another repository.
+
+`git clone https://github.com/Uzuazoraro/php-todo.git`
+
+ubuntu@ip-172-31-84-49:~/ansible-config-mgt$ cd ..
+ubuntu@ip-172-31-84-49:~$ git clone https://github.com/Uzuazoraro/php-todo.git
+Cloning into 'php-todo'...
+remote: Enumerating objects: 332, done.
+remote: Counting objects: 100% (332/332), done.
+remote: Compressing objects: 100% (161/161), done.
+remote: Total 332 (delta 148), reused 320 (delta 147), pack-reused 0
+Receiving objects: 100% (332/332), 68.04 KiB | 3.40 MiB/s, done.
+Resolving deltas: 100% (148/148), done.
+
+### Add php-todo folder to workspace
+
+Click on file
+Click on add folder to workspace
+Click on php-todo
+Click ok
+
+### On you Jenkins server, install PHP, its dependencies and Composer tool (Feel free to do this manually at first, then update your Ansible accordingly later)
+
+`sudo apt install -y zip libapache2-mod-php phploc php-{xml,bcmath,bz2,intl,gd,mbstring,mysql,zip}`
+
+ubuntu@ip-172-31-84-49:~$ sudo su
+root@ip-172-31-84-49:/home/ubuntu# sudo apt install -y zip libapache2-mod-php phploc php-{xml,bcmath,bz2,intl,gd,mbstring,mysql,zip}
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  apache2 apache2-bin apache2-data apache2-utils libapache2-mod-php8.1 libapr1 libaprutil1 libaprutil1-dbd-sqlite3 libaprutil1-ldap liblua5.3-0 libonig5 libzip4
+  php-common php-file-iterator php-json php8.1-bcmath php8.1-bz2 php8.1-cli php8.1-common php8.1-gd php8.1-intl php8.1-mbstring php8.1-mysql php8.1-opcache
+  php8.1-readline php8.1-xml php8.1-zip phpunit-cli-parser phpunit-version ssl-cert unzip
+Suggested packages:
+  apache2-doc apache2-suexec-pristine | apache2-suexec-custom www-browser php-pear
+The following NEW packages will be installed:
+  apache2 apache2-bin apache2-data apache2-utils libapache2-mod-php libapache2-mod-php8.1 libapr1 libaprutil1 libaprutil1-dbd-sqlite3 libaprutil1-ldap liblua5.3-0
+  libonig5 libzip4 php-bcmath php-bz2 php-common php-file-iterator php-gd php-intl php-json php-mbstring php-mysql php-xml php-zip php8.1-bcmath php8.1-bz2
+  php8.1-cli php8.1-common php8.1-gd php8.1-intl php8.1-mbstring php8.1-mysql php8.1-opcache php8.1-readline php8.1-xml php8.1-zip phploc phpunit-cli-parser
+  phpunit-version ssl-cert unzip zip
+0 upgraded, 42 newly installed, 0 to remove and 2 not upgraded.
+Need to get 8778 kB of archives.
+After this operation, 34.5 MB of additional disk space will be used.
+
+Install PHP Composer
+=====================
+
+`sudo apt update`
+`apt install php-cli unzip`
+`curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php`
+`HASH=`curl -sS https://composer.github.io/installer.sig``
+`php -r "if (hash_file('SHA384', '/tmp/composer-setup.php') === '$HASH') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"`
+`php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer`
+
+root@ip-172-31-84-49:/home/ubuntu# curl -sS https://getcomposer.org/installer | php
+root@ip-172-31-84-49:/home/ubuntu# HASH=`curl -sS https://composer.github.io/installer.sig`
+root@ip-172-31-84-49:/home/ubuntu# php -r "if (hash_file('SHA384', '/tmp/composer-setup.php') === '$HASH') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+Installer verified
+root@ip-172-31-84-49:/home/ubuntu# php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
+
+
+All settings correct for using Composer
+Downloading...
+
+Composer (version 2.4.2) successfully installed to: /usr/local/bin/composer
+Use it: php /usr/local/bin/composer
+
+`sudo apt install php8.1-mysql php8.1-mbstring php8.1-xml php8.1-curl`
+
+root@ip-172-31-84-49:/home/ubuntu# php -v
+PHP 8.1.10 (cli) (built: Sep 14 2022 10:21:36) (NTS)
+Copyright (c) The PHP Group
+Zend Engine v4.1.10, Copyright (c) Zend Technologies
+    with Zend OPcache v8.1.10, Copyright (c), by Zend Technologies
+
+
+
+### Install Jenkins plugins
+============================
+
+## Plot plugin
+## Artifactory plugin
+
+We will use plot plugin to display tests reports, and code coverage information.
+The Artifactory plugin will be used to easily upload code artifacts into an Artifactory server.
+
+Installing Plugins/Upgrades
+Preparation	
+Checking internet connectivity
+Checking update center connectivity
+Success
+Plot	 Success
+Loading plugin extensions	 Success
+Config File Provider	 Success
+Ivy	 Success
+Javadoc	 Success
+Maven Integration	 Success
+Artifactory	 Success
+Loading plugin extensions	 Success
+
