@@ -77,33 +77,6 @@ Update your playbooks/common.yml file with following code:
 
 ![ansible playbook common.yml](./run playbook.png)
 
-<<<<<<< HEAD
-ubuntu@ip-172-31-81-174:~/ansible-config-mgt$ ansible-playbook -i inventory/dev.yml playbooks/common.yml
-
-PLAY [update web, nfs and db servers] ***************************************************************************************************************
-
-TASK [Gathering Facts] ******************************************************************************************************************************
-
-ok: [172.31.89.251]
-
-PLAY [update LB server] *****************************************************************************************************************************
-
-TASK [Gathering Facts] ******************************************************************************************************************************ok: [172.31.93.79]
-
-TASK [Update apt repo] ******************************************************************************************************************************changed: [172.31.93.79]
-
-TASK [ensure wireshark is at the latest version] ****************************************************************************************************ok: [172.31.93.79]
-
-PLAY RECAP ******************************************************************************************************************************************172.31.81.40               : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-172.31.86.92               : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-172.31.88.17               : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-172.31.89.251              : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-172.31.93.79               : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-
-=======
->>>>>>> 3e5b0079a72761f9fe4bb225d6c55daba96dd4c0
-
-
 # ansible-config-mgt
 
 ## ANSIBLE REFACTORING AND STATIC ASSIGNMENTS: PROJECT 12 
