@@ -1,9 +1,8 @@
-<<<<<<< HEAD
-=======
 pipeline {
     agent any
 
   stages {
+    
     stage('Build') {
       steps {
         script {
@@ -21,4 +20,3 @@ pipeline {
     }
     }
 }
->>>>>>> ee4e5e9 (update changes)
