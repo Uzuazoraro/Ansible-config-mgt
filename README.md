@@ -394,6 +394,172 @@ Click on the "Administration" button
 
 Note: Ensure that Ansible runs against the Dev environment successfully.
 
+pipeline {
+  agent any
+
+  environment {
+      ANSIBLE_CONFIG="${WORKSPACE}/deploy/ansible.cfg"
+    }
+
+  stages {
+    stage("Initial cleanup") {
+      steps {
+        dir("${WORKSPACE}") {
+          deleteDir()
+        }
+      }
+    }
+
+    stage('Checkout SCM') {
+      steps {
+        git branch: 'feature/jenkinspipeline-stages', url: 'https://github.com/Uzuazoraro/ansible-config-mgt.git'
+      }
+    }
+
+    stage('Prepare Ansible For Execution') {
+      steps {
+        sh 'echo ${WORKSPACE}'
+        sh 'sed -i "3 a roles_path=${WORKSPACE}/roles" ${WORKSPACE}/deploy/ansible.cfg'
+      }
+    }
+
+    stage('Run Ansible Playbook') {
+      steps {
+        ansiblePlaybook become: true, colorized: true, credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible', inventory: 'inventory/dev.yml', playbook: 'playbooks/site.yml'
+      }
+    }
+
+    stage('Clean Workspace after build') {
+      steps {
+        cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenUnstable: true, deleteDirs: true)
+      }
+    }
+  }
+
+}
+
+playbook
+=========
+
+StartInitial cleanupCheckout SCMPrepare Ansible For ExecutionRun Ansible PlaybookClean Workspace after buildEnd
+Run Ansible Playbook
+ - 1m 2s
+Restart Run Ansible Playbook
+Invoke an ansible playbook
+1m 2s
+[t_feature_jenkinspipeline-stages] $ /usr/bin/ansible-playbook playbooks/site.yml -i inventory/dev.yml -b --become-user root --private-key /var/lib/jenkins/workspace/t_feature_jenkinspipeline-stages/ssh169335226076353878.key -u ubuntu
+
+[DEPRECATION WARNING]: ALLOW_WORLD_READABLE_TMPFILES option, moved to a per 
+
+plugin approach that is more flexible, use mostly the same config will work, 
+
+but now controlled from the plugin itself and not using the general constant. 
+
+instead. This feature will be removed from ansible-base in version 2.14. 
+
+Deprecation warnings can be disabled by setting deprecation_warnings=False in 
+
+ansible.cfg.
+
+PLAY [db] **********************************************************************
+
+TASK [Gathering Facts] *********************************************************
+
+Tuesday 20 September 2022  04:29:05 +0000 (0:00:00.023)       0:00:00.023 ***** 
+
+ok: [172.31.86.92]
+
+PLAY [db] **********************************************************************
+
+TASK [mysql : include_tasks] ***************************************************
+
+Tuesday 20 September 2022  04:29:07 +0000 (0:00:02.221)       0:00:02.244 ***** 
+
+included: /var/lib/jenkins/workspace/t_feature_jenkinspipeline-stages/roles/mysql/tasks/variables.yml for 172.31.86.92
+
+TASK [mysql : Include OS-specific variables.] **********************************
+
+Tuesday 20 September 2022  04:29:07 +0000 (0:00:00.047)       0:00:02.291 ***** 
+
+ok: [172.31.86.92] => (item=/var/lib/jenkins/workspace/t_feature_jenkinspipeline-stages/roles/mysql/vars/RedHat-8.yml)
+
+TASK [mysql : Define mysql_packages.] ******************************************
+
+Tuesday 20 September 2022  04:29:07 +0000 (0:00:00.087)       0:00:02.379 ***** 
+
+ok: [172.31.86.92]
+
+TASK [mysql : Define mysql_daemon.] ********************************************
+
+Tuesday 20 September 2022  04:29:07 +0000 (0:00:00.047)       0:00:02.427 ***** 
+
+ok: [172.31.86.92]
+
+TASK [mysql : Define mysql_slow_query_log_file.] *******************************
+
+Tuesday 20 September 2022  04:29:07 +0000 (0:00:00.047)       0:00:02.474 ***** 
+
+ok: [172.31.86.92]
+
+TASK [mysql : Define mysql_log_error.] *****************************************
+
+Tuesday 20 September 2022  04:29:07 +0000 (0:00:00.045)       0:00:02.519 ***** 
+
+ok: [172.31.86.92]
+
+TASK [mysql : Define mysql_syslog_tag.] ****************************************
+
+Tuesday 20 September 2022  04:29:07 +0000 (0:00:00.045)       0:00:02.565 ***** 
+
+ok: [172.31.86.92]
+
+TASK [mysql : Define mysql_pid_file.] ******************************************
+
+Tuesday 20 September 2022  04:29:07 +0000 (0:00:00.046)       0:00:02.611 ***** 
+
+ok: [172.31.86.92]
+
+TASK [mysql : Define mysql_config_file.] ***************************************
+
+Tuesday 20 September 2022  04:29:07 +0000 (0:00:00.045)       0:00:02.657 ***** 
+
+ok: [172.31.86.92]
+
+TASK [mysql : Define mysql_config_include_dir.] ********************************
+
+Tuesday 20 September 2022  04:29:07 +0000 (0:00:00.045)       0:00:02.702 ***** 
+
+ok: [172.31.86.92]
+
+TASK [mysql : Define mysql_socket.] ********************************************
+
+Tuesday 20 September 2022  04:29:07 +0000 (0:00:00.047)       0:00:02.750 ***** 
+
+ok: [172.31.86.92]
+
+TASK [mysql : Define mysql_supports_innodb_large_prefix.] **********************
+
+Tuesday 20 September 2022  04:29:07 +0000 (0:00:00.046)       0:00:02.796 ***** 
+
+ok: [172.31.86.92]
+
+TASK [mysql : include_tasks] ***************************************************
+
+Tuesday 20 September 2022  04:29:07 +0000 (0:00:00.045)       0:00:02.841 ***** 
+
+included: /var/lib/jenkins/workspace/t_feature_jenkinspipeline-stages/roles/mysql/tasks/setup-RedHat.yml for 172.31.86.92
+
+TASK [mysql : Ensure MySQL packages are installed.] ****************************
+
+Tuesday 20 September 2022  04:29:07 +0000 (0:00:00.053)       0:00:02.895 ***** 
+
+fatal: [172.31.86.92]: FAILED! => {"changed": false, "module_stderr": "Shared connection to 172.31.86.92 closed.\r\n", "module_stdout": "Out of memory allocating 125829120 bytes!\r\n/bin/sh: line 1:  2534 Aborted                 (core dumped) /usr/libexec/platform-python /home/ec2-user/.ansible/tmp/ansible-tmp-1663648147.9950013-2113-171507328398780/AnsiballZ_dnf.py\r\n", "msg": "MODULE FAILURE\nSee stdout/stderr for the exact error", "rc": 134}
+
+PLAY RECAP *********************************************************************
+
+172.31.86.92               : ok=14   changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+
+
 Possible errors to watch out for:
 =================================
 
