@@ -619,7 +619,7 @@ Click on add folder to workspace
 Click on php-todo
 Click ok
 
-### On you Jenkins server, install PHP, its dependencies and Composer tool (Feel free to do this manually at first, then update your Ansible accordingly later)
+### Phase 2 - On you Jenkins server, install PHP, its dependencies and Composer tool (Feel free to do this manually at first, then update your Ansible accordingly later)
 
 `sudo apt install -y zip libapache2-mod-php phploc php-{xml,bcmath,bz2,intl,gd,mbstring,mysql,zip}`
 
@@ -676,7 +676,7 @@ Zend Engine v4.1.10, Copyright (c) Zend Technologies
 
 
 
-### Install Jenkins plugins
+### Phase 3 - Install Jenkins plugins
 ============================
 
 ## Plot plugin
@@ -699,3 +699,9 @@ Maven Integration	 Success
 Artifactory	 Success
 Loading plugin extensions	 Success
 
+## Phase 4-  In Jenkins UI configure Artifactory
+
+In Jenckins UI:
+
+Click on Dashboard - Configure system (System configuration)
+Then, Configure the server ID, URL and Credentials, run Test Connection.
