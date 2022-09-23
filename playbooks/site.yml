@@ -13,7 +13,6 @@
 - name: database assignment
   import_playbook: ../static-assignments/database.yml
 
-
 # -name: import webservers file
 #  import_playbook: ../static-assignments/webservers.yml
 
