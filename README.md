@@ -619,7 +619,7 @@ Click on add folder to workspace
 Click on php-todo
 Click ok
 
-### Phase 2 - On you Jenkins server, install PHP, its dependencies and Composer tool (Feel free to do this manually at first, then update your Ansible accordingly later)
+### On you Jenkins server, install PHP, its dependencies and Composer tool (Feel free to do this manually at first, then update your Ansible accordingly later)
 
 `sudo apt install -y zip libapache2-mod-php phploc php-{xml,bcmath,bz2,intl,gd,mbstring,mysql,zip}`
 
@@ -674,9 +674,7 @@ Copyright (c) The PHP Group
 Zend Engine v4.1.10, Copyright (c) Zend Technologies
     with Zend OPcache v8.1.10, Copyright (c), by Zend Technologies
 
-
-
-### Phase 3 - Install Jenkins plugins
+### Install Jenkins plugins
 ============================
 
 ## Plot plugin
@@ -699,9 +697,39 @@ Maven Integration	 Success
 Artifactory	 Success
 Loading plugin extensions	 Success
 
-## Phase 4-  In Jenkins UI configure Artifactory
+## In Jenkins UI configure Artifactory
 
 In Jenckins UI:
 
 Click on Dashboard - Configure system (System configuration)
 Then, Configure the server ID, URL and Credentials, run Test Connection.
+
+### – Integrate Artifactory repository with Jenkins
+
+Create a dummy Jenkinsfile in the repository
+
+Using Blue Ocean, create a multibranch Jenkins pipeline
+On the database server, create database and user
+
+Create database homestead;
+CREATE USER 'homestead'@'%' IDENTIFIED BY 'sePret^i';
+GRANT ALL PRIVILEGES ON * . * TO 'homestead'@'%';
+
+Update the database connectivity requirements in the file .env.sample
+
+Update Jenkinsfile with proper pipeline configuration
+
+On the database server, create database and user
+================================================
+
+Create database homestead;
+CREATE USER 'homestead'@'%' IDENTIFIED BY 'sePret^i';
+GRANT ALL PRIVILEGES ON * . * TO 'homestead'@'%';
+
+
+Create a jenkinsfile inside php-todo
+=====================================
+
+Update Jenkinsfile with proper pipeline configuration
+
+
