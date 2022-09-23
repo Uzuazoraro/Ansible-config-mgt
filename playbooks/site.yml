@@ -9,9 +9,9 @@
 #  tags:
 #    - always  
 
-- hosts: db
-- name: database assignment
-  import_playbook: ../static-assignments/database.yml
+# - hosts: db
+# - name: database assignment
+#   import_playbook: ../static-assignments/database.yml
 
 
 # -name: import webservers file
@@ -21,6 +21,6 @@
 #- name: nginx assignment
 #  import_playbook: ../static-assignments/nginx.yml
    
-#- hosts: artifactory
-#- name: artifactory assignment
-#  import_playbook: ../static-assignments/artifactory.yml
+- hosts: artifactory
+- name: artifactory assignment
+  import_playbook: ../static-assignments/artifactory.yml
