@@ -603,6 +603,7 @@ Note that you cannot clone one repository unto another repository.
 `git clone https://github.com/Uzuazoraro/php-todo.git`
 
 ubuntu@ip-172-31-84-49:~/ansible-config-mgt$ cd ..
+
 ubuntu@ip-172-31-84-49:~$ git clone https://github.com/Uzuazoraro/php-todo.git
 Cloning into 'php-todo'...
 remote: Enumerating objects: 332, done.
@@ -613,11 +614,21 @@ Receiving objects: 100% (332/332), 68.04 KiB | 3.40 MiB/s, done.
 Resolving deltas: 100% (148/148), done.
 
 ### Add php-todo folder to workspace
+=====================================
 
 Click on file
 Click on add folder to workspace
 Click on php-todo
 Click ok
+
+ubuntu@ip-172-31-89-129:~$ git clone git@github.com:Uzuazoraro/php-todo.git
+Cloning into 'php-todo'...
+remote: Enumerating objects: 341, done.
+remote: Total 341 (delta 0), reused 0 (delta 0), pack-reused 341
+Receiving objects: 100% (341/341), 68.95 KiB | 1.86 MiB/s, done.
+Resolving deltas: 100% (154/154), done.
+ubuntu@ip-172-31-89-129:~$ ls
+ansible-config-mgt  artifactory  php-todo
 
 ### On you Jenkins server, install PHP, its dependencies and Composer tool (Feel free to do this manually at first, then update your Ansible accordingly later)
 
@@ -731,5 +742,7 @@ Create a jenkinsfile inside php-todo
 =====================================
 
 Update Jenkinsfile with proper pipeline configuration
+
+cd to 
 
 
