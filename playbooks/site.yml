@@ -14,7 +14,7 @@
   ansible.builtin.import_playbook: ../static-assignments/database.yml
 
 # -name: import webservers file
-#  import_playbook: ../static-assignments/webservers.yml
+#  ansible.builtin.import_playbook: ../static-assignments/webservers.yml
 
 #- hosts: nginx
 #- name: nginx assignment
