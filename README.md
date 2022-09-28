@@ -743,6 +743,15 @@ Create a jenkinsfile inside php-todo
 
 Update Jenkinsfile with proper pipeline configuration
 
-cd to 
+For Database Connection
+===========================
 
+DB_CONNECTION=mysql
+DB_PORT=3306
 
+`sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf`
+`sudo yum install mysql -y` 
+
+`mysql -h 172.31.86.92 -u homestead -p`
+
+git status
