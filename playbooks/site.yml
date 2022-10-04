@@ -20,6 +20,10 @@
 #- name: nginx assignment
 #  import_playbook: ../static-assignments/nginx.yml
    
-- hosts: artifactory
-- name: artifactory assignment
-  ansible.builtin.import_playbook: ../static-assignments/artifactory.yml
+# - hosts: artifactory
+# - name: artifactory assignment
+#   ansible.builtin.import_playbook: ../static-assignments/artifactory.yml
+
+  - hosts: todo
+  - name: deploy the todo application
+    ansible.builtin..import_playbook: ../static-assignments/deployment.yml
