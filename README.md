@@ -753,5 +753,100 @@ DB_PORT=3306
 `sudo yum install mysql -y` 
 
 `mysql -h 172.31.86.92 -u homestead -p`
+This is used to connect Mysql with Jenkins.
 
-git status
+`use homestead`
+
+Update the Jenkinsfile to include Unit tests step
+===================================================
+
+    stage('Execute Unit Tests') {
+      steps {
+             sh './vendor/bin/phpunit'
+      } 
+
+
+## Phase 3 – Code Quality Analysis
+
+1. Add the code analysis step in Jenkinsfile. The output of the data will be saved in build/logs/phploc.csv file.
+
+stage('Code Analysis') {
+  steps {
+        sh 'phploc app/ --log-csv build/logs/phploc.csv'
+
+  }
+}
+
+2. Plot the data using plot Jenkins plugin.
+
+Install phploc on Ubuntu
+==========================
+
+phploc is a tool for quickly measuring the size and analyzing the structure of a PHP project.
+
+Install on server.
+
+`wget https://phar.phpunit.de/phploc.phar`
+`chmod +x phpunit`
+`sudo apt install php-phpunit-phploc`
+`cd php-todo`
+
+Go to Jenkins, click on Restart code analysis.
+
+Bundle the application code for into an artifact (archived package) upload to Artifactory
+=======================================================================================
+
+Install zip on php-todo with:
+`sudo apt install zip -y`
+
+ubuntu@ip-172-31-89-129:~/php-todo$ sudo apt install zip -y
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  unzip
+The following NEW packages will be installed:
+  unzip zip
+0 upgraded, 2 newly installed, 0 to remove and 19 not upgraded.
+Need to get 350 kB of archives.
+After this operation, 929 kB of additional disk space will be used.
+
+stage ('Package Artifact') {
+    steps {
+            sh 'zip -qr php-todo.zip ${WORKSPACE}/*'
+     }
+    }
+
+
+### Publish the resulted artifact into Artifactory
+
+stage ('Upload Artifact to Artifactory') {
+          steps {
+            script { 
+                 def server = Artifactory.server 'artifactory-server'                 
+                 def uploadSpec = """{
+                    "files": [
+                      {
+                       "pattern": "php-todo.zip",
+                       "target": "<name-of-artifact-repository>/php-todo",
+                       "props": "type=zip;status=ready"
+
+                       }
+                    ]
+                 }""" 
+
+                 server.upload spec: uploadSpec
+               }
+            }
+
+        }
+
+
+### Deploy the application to the dev environment by launching Ansible pipeline
+
+stage ('Deploy to Dev Environment') {
+    steps {
+    build job: 'ansible-project/main', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: false, wait: true
+    }
+  }
+
