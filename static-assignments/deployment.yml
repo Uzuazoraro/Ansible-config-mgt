@@ -1,5 +1,79 @@
 ---
 - hosts: todo
-  roles:
-    - role: deployment
-      become: yes
+  name: Deployinh the PHP Application to Dev Environment
+  become: true
+
+  tasks: 
+    - name: install remi and rhel repo
+      ansible.builtin.yum:
+        name:
+          - https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+          - dnf-utils
+          - http://rpms.remirepo.net/enterprise/remi-release-8.rpm
+        disable_gpg_check: yes  
+
+    - name: install httpd on the webserver
+      ansible.builtin.apt
+        name: httpd
+        state: present
+
+    - name: ensure httpd is started and enabled
+      ansible.builtin.service:
+        name: httpd
+        stated: started
+        enabled: yes
+
+      name: install PHP
+      ansible.builtin.apt:
+        name:
+          - php
+          - php-mysqlnd
+          - php-gd
+          - php-curl
+          - unzip
+          - php-common
+          - php-mbstring
+          - php-opcache
+          - php-intl
+          - php-xml
+          - php-fpm
+          - php-json
+        enable repo: php:remi-7.4
+        state: present
+
+      name: ensure php-fpm is started and enabled
+      ansible.builtin.service:
+        name: php-fpm
+        state: started
+        enabled: yes
+
+      name: Download the artifact
+      get url:
+        url: http:// 44.208.24.12:8082/artifactory/uzuazoraro/php-todo
+        dest: /home/ubuntu/php-todo
+        url_username: admin
+        url_password: Rez!$11#
+
+      name: unzip the artifacts
+      ansible.builtin.unarchive:
+        src: /home/ubuntu/php-todo
+        dest: /home/ubuntu/
+        remote_src: yes
+
+      name: deploy the code
+      ansible.builtin.copy
+        src: /home/ubuntu/var/lib/jenkins/workspace/php-todo_main/
+        dest: /var/www/html/
+        force: yes
+        remote_src: yes
+
+      name: remove nginx default page
+      ansible.builtin.file:
+        path: /etc/httpd//conf.d/welcome.conf
+        state: absent
+
+      name: restart httpd
+      ansible.builtin.service:
+        name: httpd
+        state: restarted         
+          
