@@ -851,3 +851,429 @@ stage ('Deploy to Dev Environment') {
   }
 
 
+## SONARQUBE INSTALLATION
+
+`sudo apt-get update`
+`sudo apt-get upgrade`
+
+Install wget and unzip packages
+----------------------------------
+
+`sudo apt-get install wget unzip -y`
+
+ubuntu@ip-172-31-90-99:~$ sudo apt-get install wget unzip -y
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+Suggested packages:
+  zip
+The following NEW packages will be installed:
+  unzip
+0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
+Need to get 169 kB of archives.
+After this operation, 593 kB of additional disk space will be used.
+Get:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu focal/main amd64 unzip amd64 6.0-25ubuntu1 [169 kB]
+Fetched 169 kB in 0s (6376 kB/s)
+Selecting previously unselected package unzip.
+(Reading database ... 90477 files and directories currently installed.)
+Preparing to unpack .../unzip_6.0-25ubuntu1_amd64.deb ...
+Unpacking unzip (6.0-25ubuntu1) ...
+Setting up unzip (6.0-25ubuntu1) ...
+Processing triggers for mime-support (3.64ubuntu1) ...
+Processing triggers for man-db (2.9.1-1) ...
+ubuntu@ip-172-31-90-99:~$
+
+
+Install OpenJDK and Java Runtime Environment (JRE) 11
+------------------------------------------------------
+
+` sudo apt-get install openjdk-11-jdk -y`
+ `sudo apt-get install openjdk-11-jre -y`
+
+ Processing triggers for mime-support (3.64ubuntu1) ...
+Processing triggers for libc-bin (2.31-0ubuntu9.9) ...
+Processing triggers for systemd (245.4-4ubuntu3.18) ...
+Processing triggers for man-db (2.9.1-1) ...
+Processing triggers for ca-certificates (20211016~20.04.1) ...
+Updating certificates in /etc/ssl/certs...
+0 added, 0 removed; done.
+Running hooks in /etc/ca-certificates/update.d...
+
+done.
+done.
+ubuntu@ip-172-31-90-99:~$ sudo apt-get install openjdk-11-jre -y
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+openjdk-11-jre is already the newest version (11.0.16+8-0ubuntu1~20.04).
+openjdk-11-jre set to manually installed.
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+ubuntu@ip-172-31-90-99:~$ 
+
+Set default JDK – To set default JDK or switch to OpenJDK enter below command:
+------------------------------------------------------------------------------
+
+`sudo update-alternatives --config java`
+
+ubuntu@ip-172-31-90-99:~$ sudo update-alternatives --config java
+There is only one alternative in link group java (providing /usr/bin/java): /usr/lib/jvm/java-11-openjdk-amd64/bin/java
+Nothing to configure.
+
+`java --version`
+
+ubuntu@ip-172-31-90-99:~$ java -version
+openjdk version "11.0.16" 2022-07-19
+OpenJDK Runtime Environment (build 11.0.16+8-post-Ubuntu-0ubuntu120.04)
+OpenJDK 64-Bit Server VM (build 11.0.16+8-post-Ubuntu-0ubuntu120.04, mixed mode, sharing)
+
+Install and Setup PostgreSQL 10 Database for SonarQube
+=======================================================
+
+`sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'`
+
+Download PostgreSQL software
+
+`wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -`
+
+Install PostgreSQL Database Server
+
+`sudo apt-get -y install postgresql postgresql-contrib`
+
+Start PostgreSQL Database Server
+
+`sudo systemctl start postgresql`
+
+Enable it to start automatically at boot time
+
+`sudo systemctl enable postgresql`
+
+ubuntu@ip-172-31-90-99:~$ sudo systemctl start postgresql
+ubuntu@ip-172-31-90-99:~$ sudo systemctl enable postgresql
+Synchronizing state of postgresql.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install enable postgresql
+
+Set up password
+
+`sudo passwd postgres`
+
+Switch to the postgres user
+
+`su - postgres`
+
+Create a new user by typing
+
+`createuser sonar`
+
+Switch to the PostgreSQL shell
+
+`psql`
+
+Set a password for the newly created user for SonarQube database
+
+`ALTER USER sonar WITH ENCRYPTED password 'passWord.1';`
+
+Create a new database for PostgreSQL database by running:
+
+`CREATE DATABASE sonarqube OWNER sonar;`
+
+Grant all privileges to sonar user on sonarqube Database.
+
+`grant all privileges on DATABASE sonarqube to sonar;`
+
+Exit from the psql shell:
+
+`\q`
+Switch back to the sudo user by running the exit command.
+
+`exit`
+
+ubuntu@ip-172-31-90-99:~$ sudo systemctl start postgresql
+ubuntu@ip-172-31-90-99:~$ sudo systemctl enable postgresql
+Synchronizing state of postgresql.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install enable postgresql
+ubuntu@ip-172-31-90-99:~$ sudo passwd postgres
+New password: 
+Retype new password: 
+passwd: password updated successfully
+ubuntu@ip-172-31-90-99:~$ su - postgres
+Password: 
+postgres@ip-172-31-90-99:~$ createuser sonar
+postgres@ip-172-31-90-99:~$ psql
+psql (12.12 (Ubuntu 12.12-0ubuntu0.20.04.1))
+Type "help" for help.
+
+postgres=# ALTER USER sonar WITH ENCRYPTED password 'passWord.1';
+ALTER ROLE
+postgres=# CREATE DATABASE sonarqube OWNER sonar
+postgres-# grant all privileges on DATABASE sonarqube to sonar;
+GRANT
+postgres=# \q
+postgres@ip-172-31-90-99:~$ exit
+logout
+ubuntu@ip-172-31-90-99:~$
+
+
+Install SonarQube on Ubuntu 20.04 LTS
+
+Navigate to the tmp directory to temporarily download the installation files
+
+`cd /tmp && sudo wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-7.9.3.zip`
+
+Unzip the archive setup to /opt directory
+
+`sudo unzip sonarqube-7.9.3.zip -d /opt`
+
+Move extracted setup to /opt/sonarqube directory
+
+`sudo mv /opt/sonarqube-7.9.3 /opt/sonarqube`
+
+   creating: /opt/sonarqube-7.9.3/lib/jdbc/h2/
+  inflating: /opt/sonarqube-7.9.3/lib/jdbc/h2/h2-1.3.176.jar
+  inflating: /opt/sonarqube-7.9.3/lib/sonar-shutdowner-7.9.3.jar
+   creating: /opt/sonarqube-7.9.3/elasticsearch/plugins/
+ubuntu@ip-172-31-90-99:/tmp$ sudo mv /opt/sonarqube-7.9.3 /opt/sonarqube
+ubuntu@ip-172-31-90-99:/tmp$
+
+## CONFIGURE SONARQUBE
+=======================
+
+We cannot run SonarQube as a root user, if you run using root user it will stop automatically. The ideal approach will be to create a separate group and a user to run SonarQube
+
+Create a group sonar
+
+`sudo groupadd sonar`
+
+Now add a user with control over the /opt/sonarqube directory
+
+`sudo useradd -c "user to run SonarQube" -d /opt/sonarqube -g sonar sonar` 
+`sudo chown sonar:sonar /opt/sonarqube -R`
+
+ubuntu@ip-172-31-90-99:~$ sudo groupadd sonar
+ubuntu@ip-172-31-90-99:~$ sudo useradd -c "user to run SonarQube" -d /opt/sonarqube -g sonar sonar
+ubuntu@ip-172-31-90-99:~$ sudo chown sonar:sonar /opt/sonarqube -R
+
+Open SonarQube configuration file using your favourite text editor (e.g., nano or vim)
+
+`sudo vim /opt/sonarqube/conf/sonar.properties`
+
+Find the following lines and uncomment them. Provide the username and password.
+
+#sonar.jdbc.username=sonar
+#sonar.jdbc.password=passWord.1
+
+Edit the sonar script file and set RUN_AS_USER
+
+`sudo nano /opt/sonarqube/bin/linux-x86-64/sonar.sh`
+
+#IGNORE_SIGNALS=true
+
+# If specified, the Wrapper will be run as the specified user.
+# IMPORTANT - Make sure that the user has the required privileges to write
+#  the PID file and wrapper.log files.  Failure to be able to write the log
+#  file will cause the Wrapper to exit without any way to write out an error
+#  message.
+# NOTE - This will set the user which is used to run the Wrapper as well as
+#  the JVM and is not useful in situations where a privileged resource or
+#  port needs to be allocated prior to the user being changed.
+RUN_AS_USER=sonar
+
+# The following two lines are used by the chkconfig command. Change as is
+#  appropriate for your application.  They should remain commented.
+# chkconfig: 2345 20 80
+# description: Test Wrapper Sample Application
+
+# Do not modify anything beyond this point
+#-----------------------------------------------------------------------------
+
+# Get the fully qualified path to the script
+
+^G Get Help     ^O Write Out    ^W Where Is     ^K Cut Text     ^J Justify      ^C Cur Pos      M-U Undo        M-A Mark Text   M-] To Bracket  M-Q Previous    ^B Back         ^◀ Prev Word
+^X Exit         ^R Read File    ^\ Replace      ^U Paste Text   ^T To Spell     ^_ Go To Line   M-E Redo        M-6 Copy Text   ^Q Where Was    M-W Next        ^F Forward      ^▶ Next Word
+
+### Now, to start SonarQube we need to do following:
+-----------------------------------------------------
+
+Switch to sonar user
+
+`sudo su sonar`
+
+Move to the script directory
+
+`cd /opt/sonarqube/bin/linux-x86-64/`
+
+Run the script to start SonarQube
+
+`./sonar.sh start`
+
+ubuntu@ip-172-31-90-99:~$ sudo vim /opt/sonarqube/conf/sonar.propertiesubuntu@ip-172-31-90-99:~$ sudo nano /opt/sonarqube/bin/linux-x86-64/sonar.sh
+ubuntu@ip-172-31-90-99:~$ sudo su sonar
+$ cd /opt/sonarqube/bin/linux-x86-64/
+$ ./sonar.sh start
+Starting SonarQube...
+Started SonarQube.
+$
+
+Check SonarQube running status:
+
+`./sonar.sh status`
+
+ubuntu@ip-172-31-90-99:~$ sudo su sonar
+$ cd /opt/sonarqube/bin/linux-x86-64/
+$ ./sonar.sh start
+Starting SonarQube...
+Removed stale pid file: /opt/sonarqube/bin/linux-x86-64/./SonarQube.pid
+Started SonarQube.
+$ ./sonar.sh status
+SonarQube is running (1046).
+$
+
+To check SonarQube logs, navigate to /opt/sonarqube/logs/sonar.log directory
+
+`tail /opt/sonarqube/logs/sonar.log`
+
+$ tail /opt/sonarqube/logs/sonar.log
+2022.10.09 00:41:33 INFO  app[][o.s.a.SchedulerImpl] Waiting for Elasticsearch to be up and running
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+2022.10.09 00:41:35 INFO  app[][o.e.p.PluginsService] no modules loaded
+2022.10.09 00:41:35 INFO  app[][o.e.p.PluginsService] loaded plugin [org.elasticsearch.transport.Netty4Plugin]
+2022.10.09 00:41:58 INFO  app[][o.s.a.SchedulerImpl] Process[es] is up
+2022.10.09 00:41:58 INFO  app[][o.s.a.ProcessLauncherImpl] Launch process[[key='web', ipcIndex=2, logFilenamePrefix=web]] from [/opt/sonarqube]: /usr/lib/jvm/java-11-openjdk-amd64/bin/java -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/opt/sonarqube/temp --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED -Xmx512m -Xms128m -XX:+HeapDumpOnOutOfMemoryError -Dhttp.nonProxyHosts=localhost|127.*|[::1] -cp ./lib/common/*:/opt/sonarqube/lib/jdbc/postgresql/postgresql-42.2.5.jar org.sonar.server.app.WebServer /opt/sonarqube/temp/sq-process12064081722208917461properties
+2022.10.09 00:42:16 INFO  app[][o.s.a.SchedulerImpl] Process[web] is up
+2022.10.09 00:42:16 INFO  app[][o.s.a.ProcessLauncherImpl] Launch process[[key='ce', ipcIndex=3, logFilenamePrefix=ce]] from [/opt/sonarqube]: /usr/lib/jvm/java-11-openjdk-amd64/bin/java -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/opt/sonarqube/temp --add-opens=java.base/java.util=ALL-UNNAMED -Xmx512m -Xms128m -XX:+HeapDumpOnOutOfMemoryError -Dhttp.nonProxyHosts=localhost|127.*|[::1] -cp ./lib/common/*:/opt/sonarqube/lib/jdbc/postgresql/postgresql-42.2.5.jar org.sonar.ce.app.CeServer /opt/sonarqube/temp/sq-process4910143770100196201properties
+2022.10.09 00:42:24 INFO  app[][o.s.a.SchedulerImpl] Process[ce] is up
+2022.10.09 00:42:24 INFO  app[][o.s.a.SchedulerImpl] SonarQube is up   
+
+### Configure SonarQube to run as a systemd service
+===================================================
+
+Stop the currently running SonarQube service
+
+`cd /opt/sonarqube/bin/linux-x86-64/`
+
+Run the script to stop SonarQube
+
+`./sonar.sh stop`
+
+$ cd /opt/sonarqube/bin/linux-x86-64/
+$ ./sonar.sh stop
+Gracefully stopping SonarQube...
+Waiting for SonarQube to exit...
+Waiting for SonarQube to exit...
+Waiting for SonarQube to exit...
+Waiting for SonarQube to exit...
+Waiting for SonarQube to exit...
+Waiting for SonarQube to exit...
+Stopped SonarQube.
+
+Type exit to exit.
+
+Create a systemd service file for SonarQube to run as System Startup.
+
+`sudo nano /etc/systemd/system/sonar.service`
+
+[Unit]
+Description=SonarQube service
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
+ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
+
+User=sonar
+Group=sonar
+Restart=always
+
+LimitNOFILE=65536
+LimitNPROC=4096
+
+[Install]
+WantedBy=multi-user.target
+
+Save the file and control the service with systemctl
+
+sudo systemctl start sonar
+sudo systemctl enable sonar
+sudo systemctl status sonar
+
+ubuntu@ip-172-31-90-99:/$ sudo nano /etc/systemd/system/sonar.service
+ubuntu@ip-172-31-90-99:/$ sudo systemctl start sonar
+ubuntu@ip-172-31-90-99:/$ sudo systemctl enable sonar
+Created symlink /etc/systemd/system/multi-user.target.wants/sonar.service → /etc/systemd/system/sonar.service.
+ubuntu@ip-172-31-90-99:/$ sudo systemctl status sonar
+● sonar.service - SonarQube service
+     Loaded: loaded (/etc/systemd/system/sonar.service; enabled; vendor preset: enabled)
+     Active: active (running) since Sat 2022-10-08 03:31:24 UTC; 46s ago
+   Main PID: 4436 (wrapper)
+      Tasks: 154 (limit: 2309)
+     Memory: 1.3G
+     CGroup: /system.slice/sonar.service
+             ├─4436 /opt/sonarqube/bin/linux-x86-64/./wrapper /opt/sonarqube/bin/linux-x86-64/../../conf/wrapper.conf wrapper.syslog.ident=SonarQube wrapper.pidfile=/opt/sonarqube/bin/linux-x86-64/./S>
+             ├─4438 java -Dsonar.wrapped=true -Djava.awt.headless=true -Xms8m -Xmx32m -Djava.library.path=./lib -classpath ../../lib/jsw/wrapper-3.2.3.jar:../../lib/common/sonar-plugin-api-7.9.3-all.j>
+             ├─4466 /usr/lib/jvm/java-11-openjdk-amd64/bin/java -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -Des.networkaddress.cache.ttl=60 -Des.n>
+             ├─4563 /usr/lib/jvm/java-11-openjdk-amd64/bin/java -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/opt/sonarqube/temp --add-opens=java.base/java.util=ALL-UNNAMED --add-op>
+             └─5094 /usr/lib/jvm/java-11-openjdk-amd64/bin/java -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/opt/sonarqube/temp --add-opens=java.base/java.util=ALL-UNNAMED -Xmx512m>
+
+Oct 08 03:31:23 ip-172-31-90-99 systemd[1]: Starting SonarQube service...
+Oct 08 03:31:23 ip-172-31-90-99 sonar.sh[4386]: Starting SonarQube...
+Oct 08 03:31:24 ip-172-31-90-99 sonar.sh[4386]: Started SonarQube.
+Oct 08 03:31:24 ip-172-31-90-99 systemd[1]: Started SonarQube service.
+lines 1-17/17 (END)
+
+
+Access SonarQube
+To access SonarQube using browser, type server’s IP address followed by port 9000
+
+http://server_IP:9000 OR http://54.172.169.206:9000
+
+Default username: admin
+Default password: admin
+
+## CONFIGURE SONARQUBE AND JENKINS FOR QUALITY GATE
+=================================================
+
+In Jenkins, install SonarScanner plugin
+
+Jenkins > Manage Jenkins > Manage plugins > Click Available > Type SonarQube Scanner > Click Install without Restart
+
+### Configure SonarQube Scanner
+
+Navigate to configure system in Jenkins.
+
+### Generate authentication token in SonarQube
+
+User > My Account > Security > Generate Tokens
+
+Generated token: bd52583d665d254a6524a66ebda2dcb04716dc2e
+
+### Configure Quality Gate Jenkins Webhook in SonarQube – The URL should point to your Jenkins server http://{JENKINS_HOST}/sonarqube-webhook/
+
+Administration > Configuration > Webhooks > Create
+
+Continuous Code Quality
+Projects
+Issues
+Rules
+Quality Profiles
+Quality Gates
+Administration
+
+Search for projects and files...
+A
+Administration
+Configuration
+Security
+Projects
+System
+Marketplace
+WebhooksCreateWebhooks are used to notify external services when a project analysis is done. An HTTP POST request including a JSON payload is sent to each of the provided URLs. Learn more in the Webhooks documentation.
+Name	URL	Secret?	Last delivery	
+Jenkins	http://34.202.65.97:8080/sonarqube-webhooks	Yes	Never	
+
+### Setup SonarQube scanner from Jenkins – Global Tool Configuration
+
+Manage Jenkins > Global Tool Configuration
+
+
+

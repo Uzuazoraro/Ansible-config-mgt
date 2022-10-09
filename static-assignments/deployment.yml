@@ -52,7 +52,7 @@
         url: http:// 44.208.24.12:8082/artifactory/uzuazoraro/php-todo
         dest: /home/ubuntu/php-todo
         url_username: uzuazoraro
-        url_password: AP8tHzty7NxP3sJ4m1z6PfHMhW3 -T
+        url_password: AP8tHzty7NxP3sJ4m1z6PfHMhW3
 
       name: unzip the artifacts
       ansible.builtin.unarchive:
